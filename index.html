@@ -560,14 +560,18 @@ footer .logo{font-size:20px;color:var(--muted)}
         <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--ink);line-height:1.3;margin-bottom:4px">Which of these <em style="font-style:italic;color:var(--terra);font-weight:500">excites you most</em>?</p>
         <p style="font-size:12px;color:var(--ghost);margin-bottom:14px">Pick up to 3</p>
         <div id="wl-feat-opts" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Beautiful watercolour illustrations" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🎨  Beautiful watercolour illustrations</button>
-          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Monthly books with child as hero" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">📚  Monthly books with your child as the hero</button>
-          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Digital story updates to reading level" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🌱  Digital story updates to your child's reading level</button>
-          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Audio narration in your own voice" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🎙️  Audio narration in your own voice</button>
-          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Animated video version" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🎬  Animated video version of the story</button>
+          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Beautiful watercolour illustrations of my family" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🎨  Beautiful watercolour illustrations of my family</button>
+          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Monthly books with child as hero" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">📚  Monthly books with my child as a hero about what they're most interested in</button>
+          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Digital story updates to reading level" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🌱  My app updates books based on my child's reading level</button>
+          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Audio narration in your own voice" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🎙️  Audio narration using my voice</button>
+          <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Animated video version" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🎬  Animated video versions of our family's stories</button>
           <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Multiple languages" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🌍  Available in multiple languages</button>
           <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Special needs and sensory differences" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">💙  Designed for special needs and sensory differences</button>
           <button class="wl-feat-opt" onclick="toggleFeature(this)" data-val="Every book plants a tree" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">🌳  Every printed book plants a tree</button>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button id="wl-other-btn" onclick="toggleOther()" style="font-size:13px;padding:11px 18px;border-radius:12px;border:1px solid var(--brd);background:var(--cream);color:var(--soft);cursor:pointer;text-align:left;transition:all .2s">✏️  Something else...</button>
+            <input id="wl-feat-other-input" type="text" placeholder="Tell us what you'd love..." style="display:none;width:100%;padding:11px 18px;border-radius:12px;border:1px solid var(--terra);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none" />
+          </div>
         </div>
         <div style="display:flex;gap:10px">
           <button onclick="goTo(11)" style="flex:1;font-size:13px;padding:13px;border-radius:100px;border:1px solid var(--brd);background:transparent;color:var(--soft);cursor:pointer">Back</button>
@@ -762,9 +766,29 @@ function toggleFeature(btn) {
   }
 }
 
+function toggleOther() {
+  var btn = document.getElementById('wl-other-btn');
+  var input = document.getElementById('wl-feat-other-input');
+  var active = btn.getAttribute('data-selected') === 'true';
+  if (active) {
+    btn.removeAttribute('data-selected');
+    btn.style.background = 'var(--cream)'; btn.style.borderColor = 'var(--brd)';
+    input.style.display = 'none'; input.value = '';
+  } else {
+    btn.setAttribute('data-selected', 'true');
+    btn.style.background = 'var(--tpale)'; btn.style.borderColor = 'var(--terra)';
+    input.style.display = 'block'; input.focus();
+  }
+}
+
 function getFeatures() {
   var vals = [];
   document.getElementById('wl-feat-opts').querySelectorAll('.wl-feat-opt[data-selected="true"]').forEach(function(b) { vals.push(b.getAttribute('data-val')); });
+  var otherBtn = document.getElementById('wl-other-btn');
+  var otherInput = document.getElementById('wl-feat-other-input');
+  if (otherBtn && otherBtn.getAttribute('data-selected') === 'true' && otherInput.value.trim()) {
+    vals.push('Other: ' + otherInput.value.trim());
+  }
   return vals.join('; ');
 }
 
