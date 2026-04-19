@@ -493,7 +493,7 @@ footer .logo{font-size:20px;color:var(--muted)}
       <!-- S9B: SOLUTION VALIDATION P7 -->
       <div id="wl-screen-9b" style="display:none">
         <p style="font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);margin-bottom:16px">How excited are you?</p>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--ink);line-height:1.4;margin-bottom:28px"><em style="font-style:italic;color:var(--terra);font-weight:500">Imagine:</em> Your real family memories, beautifully <em style="font-style:italic;color:var(--terra);font-weight:500">written for your child's developmental stage</em> and brought to life in <em style="font-style:italic;color:var(--terra);font-weight:500">watercolour illustration</em> — a book they'll read for the rest of their life.</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--ink);line-height:1.4;margin-bottom:28px"><em style="font-style:italic;color:var(--terra);font-weight:500">Imagine:</em> Your real family memories, beautifully <em style="font-style:italic;color:var(--terra);font-weight:500">written for your child's developmental stage</em> and brought to life in <em style="font-style:italic;color:var(--terra);font-weight:500">watercolour illustration</em>, a book they'll read for the rest of their life.</p>
         <div class="wl-scale-block" data-qid="p7" data-next="10" style="margin-bottom:28px"></div>
         <div style="display:flex;gap:10px"><button onclick="goTo(9)" style="flex:1;font-size:13px;padding:13px;border-radius:100px;border:1px solid var(--brd);background:transparent;color:var(--soft);cursor:pointer">Back</button><button onclick="goTo(10)" class="wl-next-btn" style="flex:2;font-size:14px;font-weight:500;padding:13px;border-radius:100px;border:none;background:var(--terra);color:white;cursor:pointer" onmouseover="this.style.background='#B05340'" onmouseout="this.style.background='var(--terra)'">Next</button></div>
         <div style="text-align:center;margin-top:10px"><button onclick="goTo(10)" style="font-size:12px;color:var(--ghost);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px">Skip question</button></div>
@@ -514,7 +514,7 @@ footer .logo{font-size:20px;color:var(--muted)}
           oninput="document.getElementById('wl-price-display').textContent=this.value"
           style="width:100%;accent-color:var(--terra);margin-bottom:32px;cursor:pointer" />
         <div style="display:flex;gap:10px">
-          <button onclick="goTo(9)" style="flex:1;font-size:13px;padding:13px;border-radius:100px;border:1px solid var(--brd);background:transparent;color:var(--soft);cursor:pointer">Back</button>
+          <button onclick="goTo('9b')" style="flex:1;font-size:13px;padding:13px;border-radius:100px;border:1px solid var(--brd);background:transparent;color:var(--soft);cursor:pointer">Back</button>
           <button onclick="goTo(11)" style="flex:2;font-size:14px;font-weight:500;padding:13px;border-radius:100px;border:none;background:var(--terra);color:white;cursor:pointer" onmouseover="this.style.background='#B05340'" onmouseout="this.style.background='var(--terra)'">Next</button>
         </div>
         <div style="text-align:center;margin-top:10px">
@@ -579,7 +579,7 @@ footer .logo{font-size:20px;color:var(--muted)}
           </div>
         </div>
         <div style="display:flex;gap:10px">
-          <button onclick="goTo(11)" style="flex:1;font-size:13px;padding:13px;border-radius:100px;border:1px solid var(--brd);background:transparent;color:var(--soft);cursor:pointer">Back</button>
+          <button onclick="goTo('11b')" style="flex:1;font-size:13px;padding:13px;border-radius:100px;border:1px solid var(--brd);background:transparent;color:var(--soft);cursor:pointer">Back</button>
           <button onclick="goTo(13)" style="flex:2;font-size:14px;font-weight:500;padding:13px;border-radius:100px;border:none;background:var(--terra);color:white;cursor:pointer" onmouseover="this.style.background='#B05340'" onmouseout="this.style.background='var(--terra)'">Next</button>
         </div>
       
@@ -870,7 +870,7 @@ function buildScales() {
         this.style.background = 'var(--tpale)'; this.style.borderColor = 'var(--terra)';
         this.setAttribute('data-selected','true');
         var nextStep = block.getAttribute('data-next');
-        if (nextStep) { setTimeout(function() { goTo(parseInt(nextStep)); }, 350); }
+        if (nextStep) { setTimeout(function() { goTo(isNaN(nextStep) ? nextStep : parseInt(nextStep)); }, 350); }
       };
       row.appendChild(btn);
     });
@@ -954,6 +954,15 @@ function submitSurvey() {
 </footer>
 
 <script>
+// Auto-open modal if ?survey=1 in URL
+(function() {
+  if (window.location.search.indexOf('survey=1') !== -1) {
+    window.addEventListener('DOMContentLoaded', function() {
+      openWaitlist();
+    });
+  }
+})();
+
 function shareKindred() {
   const shareData = {
     title: 'Kindred Books',
