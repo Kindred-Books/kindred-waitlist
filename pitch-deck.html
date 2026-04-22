@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kindred · Investor Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{font-family:"DM Sans",sans-serif;background:#EDE4D8;color:#1A1714;display:flex;align-items:center;justify-content:center;min-height:100vh}
+:root{
+  --t:#C4614A;--tp:#F0DDD8;--tm:#E2C4BB;--th:#A84E38;
+  --s:#6B9175;--sp:#E3F0E7;--sm:#B0CDB8;
+  --g:#C9973E;--gp:#F3E8D0;
+  --ink:#1A1714;--soft:#3D3730;--mu:#6E6259;--gh:#9A8E86;
+  --cw:#FDFAF6;--cr:#FAF6F0;--dark:#231A16;--darker:#160F0C;
+  --br:rgba(26,23,20,.1);
+}
+
+/* ── LAUNCHER ── */
+.launcher{text-align:center;padding:48px 32px}
+.l-logo{font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:400;color:var(--ink);display:block;margin-bottom:6px}
+.l-logo em{font-style:italic;color:var(--t)}
+.l-tag{font-size:13px;color:var(--gh);margin-bottom:32px;display:block;letter-spacing:.04em}
+.l-btn{padding:16px 48px;border-radius:100px;border:none;background:var(--t);color:#fff;font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:300;cursor:pointer;transition:all .28s;display:inline-flex;align-items:center;gap:12px;letter-spacing:-.01em}
+.l-btn:hover{background:var(--th);transform:translateY(-3px);box-shadow:0 14px 36px rgba(196,97,74,.35)}
+
+/* ── OVERLAY ── */
+.ov{position:fixed;inset:0;z-index:100;background:rgba(14,10,8,.7);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;padding:16px}
+.ov.open{display:flex}
+.ov.fs-mode{padding:0}
+
+/* ── MODAL ── */
+.modal{width:100%;max-width:1400px;height:min(92vh,940px);background:var(--cw);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 48px 120px rgba(14,10,8,.55);animation:up .32s cubic-bezier(.4,0,.2,1);transition:border-radius .2s}
+.modal.fs{max-width:100%;width:100%;height:100%;border-radius:0;margin:0}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CHROME ── */
+.prog{height:3px;background:rgba(26,23,20,.08);flex-shrink:0}
+.prog-fill{height:100%;background:var(--t);transition:width .5s cubic-bezier(.4,0,.2,1)}
+.mnav{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:1px solid var(--br);flex-shrink:0;background:var(--cw);gap:16px}
+.mnav-logo{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:400;flex-shrink:0}
+.mnav-logo em{font-style:italic;color:var(--t)}
+.mnav-ctr{font-size:12px;color:var(--gh);font-weight:500;letter-spacing:.06em;flex:1;text-align:center}
+.mnav-btns{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ich{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--br);background:transparent;cursor:pointer;color:var(--gh);font-size:13px;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ich:hover{border-color:var(--t);color:var(--t)}
+
+/* ── SLIDE AREA ── */
+.sv{flex:1;position:relative;overflow:hidden;min-height:0}
+.slide{position:absolute;inset:0;overflow-y:auto;display:none;scrollbar-width:thin;scrollbar-color:rgba(26,23,20,.12) transparent}
+.slide::-webkit-scrollbar{width:3px}
+.slide::-webkit-scrollbar-thumb{background:rgba(26,23,20,.15);border-radius:2px}
+.slide.active{display:block;animation:sin .32s ease}
+.slide.bk{display:block;animation:sbk .32s ease}
+@keyframes sin{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes sbk{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── FOOTER ── */
+.mfoot{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-top:1px solid var(--br);flex-shrink:0;background:var(--cw)}
+.dots{display:flex;gap:5px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(26,23,20,.14);cursor:pointer;border:none;padding:0;transition:all .28s}
+.dot.on{background:var(--t);width:18px;border-radius:3px}
+.fbtn{display:flex;align-items:center;gap:6px;padding:9px 22px;border-radius:100px;border:1.5px solid var(--br);background:transparent;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--soft);cursor:pointer;transition:all .2s;white-space:nowrap;font-weight:400}
+.fbtn:hover:not(:disabled){border-color:var(--t);color:var(--t)}
+.fbtn.pri{background:var(--t);border-color:var(--t);color:#fff;font-weight:500}
+.fbtn.pri:hover{background:var(--th)}
+.fbtn:disabled{opacity:.28;cursor:not-allowed}
+.fbtn svg{width:14px;height:14px;flex-shrink:0}
+
+/* ════════════════════════
+   SLIDE FOUNDATIONS
+════════════════════════ */
+/* Two-panel split — image left or right */
+.split{display:grid;min-height:100%}
+.split-6040{grid-template-columns:60fr 40fr}
+.split-5050{grid-template-columns:1fr 1fr}
+.split-4060{grid-template-columns:40fr 60fr}
+.split-3367{grid-template-columns:1fr 2fr}
+
+.img-panel{position:relative;overflow:hidden}
+.img-panel img{width:100%;height:100%;object-fit:cover;display:block}
+.img-panel .cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(14,10,8,.55));padding:24px 24px 16px;font-size:11px;color:rgba(255,255,255,.6);font-style:italic}
+
+.txt-panel{padding:44px 48px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+.txt-panel.dk{background:var(--dark);color:#fff}
+.txt-panel.lt{background:var(--cr)}
+.txt-panel.wm{background:var(--tp)}
+.txt-panel.sg{background:var(--sp)}
+
+/* Eyebrow / slide number */
+.ew{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--t);margin-bottom:12px}
+.ew.wh{color:rgba(196,97,74,.85)}
+
+/* Headlines */
+.h1{font-family:"Cormorant Garamond",serif;font-weight:400;line-height:1.06;letter-spacing:-.025em;font-size:clamp(42px,5.5vw,68px)}
+.h2{font-family:"Cormorant Garamond",serif;font-weight:400;line-height:1.1;letter-spacing:-.02em;font-size:clamp(30px,3.8vw,50px)}
+.h3{font-family:"Cormorant Garamond",serif;font-weight:400;line-height:1.15;letter-spacing:-.015em;font-size:clamp(22px,2.8vw,34px)}
+.h4{font-family:"Cormorant Garamond",serif;font-weight:400;line-height:1.2;font-size:clamp(18px,2.2vw,26px)}
+.wh{color:#fff}
+.tc{color:var(--t)}
+.sc{color:var(--s)}
+.gc{color:var(--g)}
+.muc{color:var(--mu)}
+
+/* Body text */
+.body{font-size:15px;line-height:1.7;color:var(--mu)}
+.body.wh{color:#BFB5AE}
+.body.sm{font-size:13px;line-height:1.65}
+.body.lg{font-size:17px;line-height:1.7}
+.body strong{color:var(--soft);font-weight:600}
+.body.wh strong{color:#fff}
+
+/* Rule */
+.rule{width:40px;height:2px;background:var(--t);border-radius:1px;margin:18px 0}
+.rule.wh{background:rgba(196,97,74,.7)}
+.rule.sm{margin:12px 0;width:28px}
+
+/* Pull quote */
+.pq{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(18px,2.4vw,26px);line-height:1.45;color:rgba(255,255,255,.92);font-weight:300}
+.pq-attr{font-size:12px;font-weight:500;color:var(--t);margin-top:12px;letter-spacing:.04em}
+.pq.dk{color:var(--soft)}
+.pq.dk + .pq-attr{color:var(--t)}
+
+/* Stat blocks */
+.stats{display:grid;gap:3px;margin-top:20px}
+.stats.g2{grid-template-columns:1fr 1fr}
+.stat-block{border-radius:10px;padding:16px 18px}
+.stat-block.hi{background:var(--tp);border:1px solid var(--tm)}
+.stat-block.lo{background:rgba(26,23,20,.04);border:1px solid var(--br)}
+.stat-block.dklo{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.stat-n{font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:400;line-height:1;letter-spacing:-.02em}
+.stat-l{font-size:12px;color:var(--mu);margin-top:3px;line-height:1.3}
+
+/* Step pills */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
+.step{border-radius:12px;padding:18px 14px;text-align:center}
+.step.warm{background:var(--tp);border:1px solid var(--tm)}
+.step.dark{background:var(--darker);border:1px solid rgba(255,255,255,.06)}
+.step-n{font-family:"Cormorant Garamond",serif;font-size:32px;color:var(--t);line-height:1;margin-bottom:8px}
+.step-l{font-family:"Cormorant Garamond",serif;font-size:16px;margin-bottom:5px}
+.step-l.wh{color:#fff}
+.step-p{font-size:12px;color:var(--mu);line-height:1.5}
+.step-p.wh{color:#C4A99A}
+
+/* Timeline */
+.tl{display:flex;border-radius:10px;overflow:hidden;border:1px solid var(--br);margin-top:16px}
+.tls{flex:1;padding:13px 10px;text-align:center;border-right:1px solid var(--br)}
+.tls:last-child{border-right:none}
+.tlnow{background:var(--t)}.tl3{background:var(--tp)}.tl12{background:var(--sp)}.tl36{background:var(--gp)}
+.tlw{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.tlwh{color:rgba(255,255,255,.65)}.tlt{color:var(--t)}.tls2{color:var(--s)}.tlg{color:var(--g)}
+.tlf{font-family:"Cormorant Garamond",serif;font-size:15px}
+.tlf.wh{color:#fff}
+
+/* Revenue cards */
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.rev-card{border-radius:12px;padding:20px 18px}
+.rev-card.warm{background:var(--tp);border:1px solid var(--tm)}
+.rev-card.dark{background:var(--darker)}
+.rev-card.sage{background:var(--sp);border:1px solid var(--sm)}
+.rev-card .h4{margin-bottom:10px}
+.rev-item{font-size:13px;line-height:1.8;color:var(--mu)}
+.rev-item.wh{color:#B8AFA9}
+.rev-item em{font-style:italic;opacity:.75}
+
+/* Moat cards */
+.moat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.moat-card{border-radius:14px;padding:24px 22px}
+.moat-card.warm{background:var(--tp);border:1px solid var(--tm)}
+.moat-card.dark{background:var(--darker)}
+.moat-card.sage{background:var(--sp);border:1px solid var(--sm)}
+.moat-icon{font-size:24px;margin-bottom:12px}
+.moat-items{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.moat-item{font-size:13px;line-height:1.5;padding-left:14px;position:relative}
+.moat-item::before{content:"—";position:absolute;left:0;opacity:.4;font-size:11px;top:1px}
+.moat-item.wh{color:#B8AFA9}
+.moat-item.sg{color:#4E7A5A}
+
+/* Comparison */
+.ctbl{border-radius:14px;overflow:hidden;border:1px solid var(--br)}
+.cth{display:grid;grid-template-columns:2fr 1fr 1.4fr 1.4fr;background:#EDE3DA;padding:11px 18px;gap:8px}
+.cth span{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.ctr{display:grid;grid-template-columns:2fr 1fr 1.4fr 1.4fr;padding:10px 18px;gap:8px;border-top:1px solid var(--br);align-items:center}
+.ctr:nth-child(even){background:rgba(253,250,246,.5)}
+.cf{font-size:13px;font-weight:500;color:var(--soft)}
+.cv{text-align:center;font-size:15px}
+.cy{color:var(--s);font-weight:700}.cn{color:var(--gh);opacity:.5}.cp{color:var(--g);font-size:12px}
+
+/* Milestones */
+.ms-list{display:flex;flex-direction:column;gap:5px}
+.ms-row{display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:9px}
+.ms-row.dn{background:#EBF3EE}.ms-row.nx{background:var(--tp)}.ms-row.pl{background:rgba(26,23,20,.03);border:1px solid var(--br)}
+.ms-ic{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.ms-tx{font-size:14px;color:var(--soft)}
+
+/* Testimonials */
+.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.testi{border-radius:10px;padding:14px 16px;background:rgba(26,23,20,.04);border:1px solid var(--br)}
+.testi p{font-size:13px;font-style:italic;color:var(--soft);line-height:1.55;margin-bottom:6px}
+.testi-attr{font-size:11px;color:var(--t);font-weight:500}
+
+/* Full-slide dark */
+.full-dk{background:var(--dark);min-height:100%;display:flex;flex-direction:column;padding:52px 56px;position:relative;overflow:hidden}
+.full-lt{background:var(--cr);min-height:100%;display:flex;flex-direction:column;padding:44px 52px;position:relative}
+
+/* Image grid strip */
+.img-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;border-radius:12px;overflow:hidden}
+.img-strip-item{overflow:hidden}
+.img-strip-item img{width:100%;height:160px;object-fit:cover;display:block;transition:transform .4s}
+.img-strip-item:hover img{transform:scale(1.04)}
+
+/* Science callout */
+.sci-box{background:var(--darker);border-radius:12px;padding:22px 24px;margin-top:16px}
+
+/* FS bigger */
+.modal.fs .h1{font-size:clamp(52px,6vw,80px)}
+.modal.fs .h2{font-size:clamp(38px,4.5vw,60px)}
+.modal.fs .txt-panel{padding:56px 64px}
+.modal.fs .full-dk{padding:64px 72px}
+.modal.fs .body{font-size:17px}
+.modal.fs .img-strip-item img{height:210px}
+
+@media(max-width:700px){
+  .split{grid-template-columns:1fr!important;grid-template-rows:280px 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .moat-grid,.rev-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .cth,.ctr{grid-template-columns:1.8fr 1fr 1fr}
+  .cth span:last-child,.ctr .cv:last-child{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="launcher" id="launcher">
+  <a href="/" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;line-height:1.1;margin-bottom:6px"><span style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;letter-spacing:.01em"><span style="color:var(--t)">kind</span><span style="color:#3D2018">red</span></span><span style="font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:400;letter-spacing:.18em;color:#3D2018">books</span></a>
+  <span class="l-tag">Investor Deck · Pre-seed · April 2026 · Confidential</span>
+  <button class="l-btn" onclick="open_()">View Investor Deck <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg></button>
+</div>
+
+<div class="ov" id="ov" onclick="ovClick(event)">
+<div class="modal" id="modal">
+  <div class="prog"><div class="prog-fill" id="pf" style="width:10%"></div></div>
+  <div class="mnav">
+    <a href="/" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;line-height:1.1"><span style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:.01em"><span style="color:var(--t)">kind</span><span style="color:#3D2018">red</span></span><span style="font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:400;letter-spacing:.18em;color:#3D2018">books</span></a>
+    <span class="mnav-ctr" id="ctr">01 / 10</span>
+    <div class="mnav-btns">
+      <button class="ich" id="fsBtn" onclick="toggleFS()" title="Full screen"><svg id="fsIcon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" width="13" height="13"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>
+      <button class="ich" onclick="close_()">✕</button>
+    </div>
+  </div>
+  <div class="sv" id="sv">
+
+<!-- S01 COVER -->
+<div class="slide active" data-n="1">
+<div class="split split-6040" style="min-height:100%">
+  <div class="txt-panel dk" style="justify-content:space-between;position:relative;overflow:hidden;padding:40px 48px">
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(ellipse,rgba(196,97,74,.13),transparent 68%);top:-120px;right:-80px;pointer-events:none"></div>
+    <div style="position:absolute;width:400px;height:380px;border-radius:50%;background:radial-gradient(ellipse,rgba(196,97,74,.07),transparent 68%);bottom:-60px;left:-60px;pointer-events:none"></div>
+    <div style="position:relative;z-index:1">
+      <div style="display:inline-flex;align-items:center;background:rgba(196,97,74,.18);border:1px solid rgba(196,97,74,.3);border-radius:100px;padding:5px 16px;font-size:11px;color:rgba(196,97,74,.95);letter-spacing:.1em;text-transform:uppercase;margin-bottom:28px">Pre-seed · April 2026 · Confidential</div>
+      <div class="h1 wh" style="max-width:480px;margin-bottom:18px;font-size:clamp(32px,4vw,52px);">The stories we tell shape <em style="font-style:italic;color:#E8A870">the people we become.</em></div>
+      <div class="rule wh"></div>
+      <p class="body wh lg" style="max-width:400px">Personalised children's books built from real family memories, grounded in developmental psychology, beautiful enough to last a lifetime.</p>
+    </div>
+    <div style="position:relative;z-index:1;display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)">
+      <div><div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Founder</div><div style="font-size:15px;color:#fff">Matt Fern</div></div>
+      <div style="width:1px;height:24px;background:rgba(255,255,255,.1)"></div>
+      <div><div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Website</div><div style="font-size:15px;color:var(--t)">kindredbooks.ai</div></div>
+      <div style="width:1px;height:24px;background:rgba(255,255,255,.1)"></div>
+      <div><div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Stage</div><div style="font-size:15px;color:#fff">Pre-launch · Sydney, AU</div></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-rows:1fr 1fr;gap:0;min-height:100%">
+    <div class="img-panel"><img src="images/AAA_-_Glencoe.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+    <div class="img-panel"><img src="images/AAAA_-_Lou_Win_Train_Kiss.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+  </div>
+</div>
+</div>
+
+<!-- S02 PROBLEM + SCIENCE -->
+<div class="slide" data-n="2">
+<div class="split split-5050" style="min-height:100%">
+  <div class="img-panel"><img src="images/AAA_-_Joanna_Baby_Win.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block"><div class="cap">The moment a story begins.</div></div>
+  <div class="txt-panel lt" style="padding:32px 36px">
+    <div class="ew" style="margin-bottom:8px">02 · The Problem & Science</div>
+    <div class="h2" style="margin-bottom:12px;font-size:clamp(24px,3vw,38px)">Generic books. A <em style="font-style:italic;color:var(--t)">missed opportunity</em><br>that psychology explains.</div>
+    <div class="rule" style="margin:10px 0"></div>
+    <p class="body" style="margin-bottom:14px;font-size:14px">Every night, parents read their children books about someone else's family, with no developmental intentionality. The science says this is a missed opportunity nobody has fixed.</p>
+    <div style="margin-bottom:14px">
+      <div style="background:var(--tp);border:1px solid var(--tm);border-radius:10px;padding:12px 16px;">
+        <div style="font-size:11px;font-weight:600;color:var(--t);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">Research-backed</div>
+        <div style="font-size:13px;color:#5A2A18;line-height:1.55">Children encode personally relevant stories in identity and long-term memory regions, not generic content. This is established developmental science that no consumer product has applied at scale.</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="border:1px solid var(--br);border-radius:9px;padding:9px 12px;background:var(--cw);display:flex;gap:10px;align-items:flex-start">
+        <div style="font-size:10px;font-weight:600;color:var(--t);letter-spacing:.06em;text-transform:uppercase;min-width:76px;flex-shrink:0;padding-top:2px">Fivush · Emory</div>
+        <p style="font-size:12px;color:var(--mu);line-height:1.5">Elaborative reminiscing shapes a child's autobiographical memory, identity, and resilience. Advisory formalisation in progress.</p>
+      </div>
+      <div style="border:1px solid var(--br);border-radius:9px;padding:9px 12px;background:var(--cw);display:flex;gap:10px;align-items:flex-start">
+        <div style="font-size:10px;font-weight:600;color:var(--t);letter-spacing:.06em;text-transform:uppercase;min-width:76px;flex-shrink:0;padding-top:2px">Komisar</div>
+        <p style="font-size:12px;color:var(--mu);line-height:1.5">Physical, emotionally resonant objects reinforce secure parent-child attachment in the critical early years.</p>
+      </div>
+      <div style="border:1px solid var(--br);border-radius:9px;padding:9px 12px;background:var(--cw);display:flex;gap:10px;align-items:flex-start">
+        <div style="font-size:10px;font-weight:600;color:var(--t);letter-spacing:.06em;text-transform:uppercase;min-width:76px;flex-shrink:0;padding-top:2px">Siegel · UCLA</div>
+        <p style="font-size:12px;color:var(--mu);line-height:1.5">Shared storytelling integrates both brain hemispheres, building emotional regulation and resilience.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S03 MARKET -->
+<div class="slide" data-n="3">
+<div class="full-dk" style="align-items:center;justify-content:center;padding:40px 56px">
+  <div style="position:absolute;width:600px;height:500px;border-radius:50%;background:radial-gradient(ellipse,rgba(196,97,74,.1),transparent 65%);top:-150px;left:-100px;pointer-events:none"></div>
+  <div style="position:absolute;width:500px;height:400px;border-radius:50%;background:radial-gradient(ellipse,rgba(107,145,117,.07),transparent 65%);bottom:-100px;right:-80px;pointer-events:none"></div>
+  <div style="max-width:840px;width:100%;position:relative;z-index:1">
+    <div style="text-align:center;margin-bottom:28px">
+      <div class="ew wh" style="margin-bottom:10px">03 · The Market</div>
+      <div class="h2 wh">Two enormous markets.<br><em style="font-style:italic;color:#E8A870">Zero products at the intersection.</em></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:center;margin-bottom:22px">
+      <div style="background:rgba(196,97,74,.12);border:1px solid rgba(196,97,74,.2);border-radius:16px;padding:22px 18px;text-align:center">
+        <div class="h2 tc" style="line-height:1;margin-bottom:8px">~$140B</div>
+        <p class="body wh sm">Children's entertainment<br><em style="opacity:.6">Generic by design</em></p>
+      </div>
+      <div style="text-align:center;padding:0 10px;font-family:'Cormorant Garamond',serif;font-size:32px;color:rgba(255,255,255,.15)">+</div>
+      <div style="background:rgba(107,145,117,.1);border:1px solid rgba(107,145,117,.18);border-radius:16px;padding:22px 18px;text-align:center">
+        <div class="h2 sc" style="line-height:1;margin-bottom:8px">~$30B</div>
+        <p class="body wh sm">Personalised gifts<br><em style="opacity:.6">Growing to ~$60B by 2033</em></p>
+      </div>
+      <div style="text-align:center;padding:0 10px;font-family:'Cormorant Garamond',serif;font-size:32px;color:rgba(255,255,255,.15)">=</div>
+      <div style="background:rgba(201,151,62,.12);border:1px solid rgba(201,151,62,.22);border-radius:16px;padding:22px 18px;text-align:center">
+        <div class="h2 gc" style="line-height:1;margin-bottom:8px">0</div>
+        <p class="body wh sm">Products at the intersection<br><em style="opacity:.6">Personal + developmental</em></p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div class="stat-block dklo"><div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px">AI Timing</div><p class="body wh sm">Personalised illustration economically viable for the first time</p></div>
+      <div class="stat-block dklo"><div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px">Parent Anxiety</div><p class="body wh sm">Rising concern about AI slop, screen addiction, and generic digital content for children</p></div>
+      <div class="stat-block dklo"><div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px">Cultural Moment</div><p class="body wh sm">Developmental psychology entering mainstream parenting culture globally</p></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S04 PRODUCT -->
+<div class="slide" data-n="4">
+<div style="min-height:100%;display:grid;grid-template-rows:180px 1fr 88px;background:var(--cr)">
+  <div style="overflow:hidden;position:relative">
+    <img src="images/AA_-_Lou_Fiona_Win_Boat.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;object-position:center 35%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(14,10,8,.58) 0%,rgba(14,10,8,.15) 55%,transparent 100%)"></div>
+    <div style="position:absolute;top:22px;left:44px">
+      <div class="ew wh">04 · The Product</div>
+      <div class="h2 wh" style="max-width:600px;margin-top:5px;font-size:clamp(26px,3.2vw,42px)">Your family's real memories.<br><em style="font-style:italic;color:#E8A870">Beautifully told.</em></div>
+    </div>
+  </div>
+  <div style="padding:20px 44px 0;display:flex;align-items:center">
+    <div style="display:grid;grid-template-columns:1fr 20px 1fr 20px 1fr 20px 1fr;gap:0;width:100%;align-items:stretch">
+      <div style="background:var(--tp);border:1px solid var(--tm);border-radius:14px;padding:20px 16px;text-align:center">
+        <div class="step-n" style="font-size:30px;margin-bottom:7px">01</div>
+        <div style="font-size:13px;font-weight:500;color:var(--t);margin-bottom:5px">Upload photos</div>
+        <div style="font-size:12px;color:var(--mu);line-height:1.45">A holiday, a birthday, an ordinary Wednesday afternoon</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tm)">›</div>
+      <div style="background:rgba(196,97,74,.06);border:1px solid rgba(196,97,74,.15);border-radius:14px;padding:20px 16px;text-align:center">
+        <div class="step-n" style="font-size:30px;margin-bottom:7px">02</div>
+        <div style="font-size:13px;font-weight:500;color:var(--t);margin-bottom:5px">Kindred builds the story</div>
+        <div style="font-size:12px;color:var(--mu);line-height:1.45">10-agent pipeline, calibrated to your child's developmental stage</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tm)">›</div>
+      <div style="background:var(--tp);border:1px solid var(--tm);border-radius:14px;padding:20px 16px;text-align:center">
+        <div class="step-n" style="font-size:30px;margin-bottom:7px">03</div>
+        <div style="font-size:13px;font-weight:500;color:var(--t);margin-bottom:5px">Review &amp; approve</div>
+        <div style="font-size:12px;color:var(--mu);line-height:1.45">Two human gates before a single image generates</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tm)">›</div>
+      <div style="background:rgba(196,97,74,.06);border:1px solid rgba(196,97,74,.15);border-radius:14px;padding:20px 16px;text-align:center">
+        <div class="step-n" style="font-size:30px;margin-bottom:7px">04</div>
+        <div style="font-size:13px;font-weight:500;color:var(--t);margin-bottom:5px">Receive the book</div>
+        <div style="font-size:12px;color:var(--mu);line-height:1.45">Watercolour-illustrated. Real family faces. Delivered to your door</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:12px 44px 16px">
+    <div style="background:var(--tp);border:1px solid var(--tm);border-radius:12px;padding:13px 20px">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#5A2A18;line-height:1.5">Not a generic story with a name swapped in. A story that could only ever belong to them. Under 5 minutes from photo upload to illustrated book.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S05 LIVING BOOK: simplified, reading level, retention -->
+<div class="slide" data-n="5">
+<div class="full-dk" style="align-items:center;justify-content:center;text-align:center;padding:36px 56px">
+  <div style="position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(ellipse,rgba(196,97,74,.09),transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none"></div>
+  <div style="max-width:820px;width:100%;position:relative;z-index:1">
+    <div class="ew wh" style="margin-bottom:12px">05 · The Living Book</div>
+    <div class="h2 wh" style="margin-bottom:10px"><em style="font-style:italic;color:#E8A870">The book evolves</em> as your child does.</div>
+    <p class="body wh" style="max-width:580px;margin:0 auto 24px;font-size:14px">Language and reading level adapt automatically at each stage. Like Audible, the more books in the library, the more invested families become in growing it. Retention is built into the product.</p>
+    <div class="tl" style="margin-bottom:22px">
+      <div class="tls tlnow"><div class="tlw tlwh">0–18m</div><div class="tlf wh" style="font-size:13px">Sensory</div><div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:3px">Attachment focus</div></div>
+      <div class="tls tl3"><div class="tlw tlt">1–3 yrs</div><div class="tlf" style="font-size:13px">Episodic</div><div style="font-size:10px;color:var(--t);opacity:.8;margin-top:3px">Memory begins</div></div>
+      <div class="tls" style="background:var(--sp)"><div class="tlw tls2">3–5 yrs</div><div class="tlf" style="font-size:13px">Adventure</div><div style="font-size:10px;color:var(--s);opacity:.9;margin-top:3px">Agency &amp; resilience</div></div>
+      <div class="tls tl12"><div class="tlw tls2">5–8 yrs</div><div class="tlf" style="font-size:13px">Narrative</div><div style="font-size:10px;color:var(--s);opacity:.9;margin-top:3px">Inner life emerges</div></div>
+      <div class="tls tl36"><div class="tlw tlg">8–12 yrs</div><div class="tlf" style="font-size:13px">Reflective</div><div style="font-size:10px;color:var(--g);opacity:.9;margin-top:3px">Themes &amp; meaning</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:left">
+      <div class="stat-block dklo">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">Reading level</div>
+        <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.5">Vocabulary, sentence complexity, and emotional register calibrated to your child's current stage</p>
+      </div>
+      <div class="stat-block dklo">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">Psychology-led</div>
+        <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.5">Every update grounded in developmental research. Not just simpler words, but richer meaning for the right stage</p>
+      </div>
+      <div style="background:rgba(196,97,74,.12);border:1px solid rgba(196,97,74,.22);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(196,97,74,.8);margin-bottom:6px">Retention built in</div>
+        <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.5">The library of a child's life is not something a family cancels. Every sibling is a new account.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S06 VALIDATION -->
+<div class="slide" data-n="6">
+<div style="min-height:100%;background:var(--cr);display:grid;grid-template-rows:auto auto auto;padding:22px 40px 18px;gap:14px">
+  <!-- Header with hero metric -->
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px">
+    <div>
+      <div class="ew" style="margin-bottom:6px">06 · Validation</div>
+      <div class="h2" style="font-size:clamp(22px,2.8vw,36px)">Early validation signals <em style="font-style:italic;color:var(--t)">are strong.</em></div>
+    </div>
+    <div style="background:var(--dark);border-radius:14px;padding:14px 24px;text-align:center;flex-shrink:0">
+      <div style="font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">Solution score</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:300;color:#E8A870;line-height:1">4.69</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.45);margin-top:2px">out of 5 · live survey</div>
+      <div style="font-size:9px;color:rgba(196,97,74,.8);margin-top:3px;font-style:italic">"Real memories, watercolour illustrated"</div>
+    </div>
+  </div>
+  <!-- Stats row — 2x bigger boxes -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+    <div style="background:var(--cw);border:1px solid var(--br);border-radius:14px;padding:18px 14px;text-align:center">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--t);line-height:1;margin-bottom:5px">4.4/5</div>
+      <div style="font-size:11px;color:var(--gh);line-height:1.4">10 in-depth interviews</div>
+    </div>
+    <div style="background:var(--cw);border:1px solid var(--br);border-radius:14px;padding:18px 14px;text-align:center">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--t);line-height:1;margin-bottom:5px">A$56</div>
+      <div style="font-size:11px;color:var(--gh);line-height:1.4">avg hardcover WTP</div>
+    </div>
+    <div style="background:var(--cw);border:1px solid var(--br);border-radius:14px;padding:18px 14px;text-align:center">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--s);line-height:1;margin-bottom:5px">71%</div>
+      <div style="font-size:11px;color:var(--gh);line-height:1.4">open to follow-up</div>
+    </div>
+    <div style="background:var(--cw);border:1px solid var(--br);border-radius:14px;padding:18px 14px;text-align:center">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--t);line-height:1;margin-bottom:5px">6/7</div>
+      <div style="font-size:11px;color:var(--gh);line-height:1.4">problem scores above 4.0</div>
+    </div>
+    <div style="background:var(--cw);border:1px solid var(--br);border-radius:14px;padding:18px 14px;text-align:center">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--t);line-height:1;margin-bottom:5px">4.86</div>
+      <div style="font-size:11px;color:var(--gh);line-height:1.4">top problem score</div>
+    </div>
+  </div>
+  <!-- Verbatims: auto height, no stretching -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:start">
+    <div style="background:var(--tp);border-radius:12px;padding:16px 18px">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#5A2A18;line-height:1.6;margin-bottom:10px">"About how I was a foster child, now I get to raise my son the way I wished I was raised."</p>
+      <div style="font-size:10px;color:var(--t);font-weight:500">Mum, 3 months old · In-depth interview</div>
+    </div>
+    <div style="background:var(--tp);border-radius:12px;padding:16px 18px">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#5A2A18;line-height:1.6;margin-bottom:10px">"The simple things: daily routines, family dinners, after school sport, board game nights."</p>
+      <div style="font-size:10px;color:var(--t);font-weight:500">Mum, children 8 &amp; 6 · In-depth interview</div>
+    </div>
+    <div style="background:var(--tp);border-radius:12px;padding:16px 18px">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#5A2A18;line-height:1.6;margin-bottom:10px">"A family holiday with both sets of grandparents, one set lives in Italy."</p>
+      <div style="font-size:10px;color:var(--t);font-weight:500">Mum, child 2y 9m · Live survey</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S07 BUSINESS MODEL -->
+<div class="slide" data-n="7">
+<div class="split split-4060" style="min-height:100%">
+  <div class="img-panel"><img src="images/AA_-_Black_Christmas.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block"><div class="cap">Every Christmas. Every birthday. Every first.</div></div>
+  <div class="txt-panel lt" style="padding:24px 28px">
+    <div class="ew" style="margin-bottom:5px">07 · Business Model</div>
+    <div class="h2" style="margin-bottom:8px;font-size:clamp(20px,2.6vw,32px)">Credit-based subscription.<br><em style="font-style:italic;color:var(--t)">Compounding LTV.</em></div>
+    <div class="rule" style="margin:6px 0 10px"></div>
+    <div style="background:linear-gradient(135deg,#D4A44C,#C4614A);border-radius:11px;padding:10px 16px;margin-bottom:10px">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:white;line-height:1.45;margin-bottom:6px">Imagine driving home from a family day out. That evening, your child's digital book about the experience is already waiting, ready to read at bedtime.</p>
+      <div style="font-size:14px;color:rgba(255,255,255,.85);font-weight:500">The subscription turns every real experience into a story, in real time.</div>
+    </div>
+    <div class="stats g2" style="gap:4px;margin-bottom:8px">
+      <div class="stat-block hi"><div class="stat-n tc" style="font-size:22px">$8.99/mo</div><div class="stat-l">Entry sub · 1 credit/month</div></div>
+      <div class="stat-block hi"><div class="stat-n tc" style="font-size:22px">$10.99/cr</div><div class="stat-l">Retail single credit</div></div>
+      <div class="stat-block lo"><div class="stat-n sc" style="font-size:22px">&gt;80%</div><div class="stat-l">Gross margin on digital</div></div>
+      <div class="stat-block lo"><div class="stat-n" style="color:var(--soft);font-size:22px">A$966</div><div class="stat-l">5-yr family LTV (conservative)</div></div>
+    </div>
+    <div class="rev-grid" style="gap:7px">
+      <div class="rev-card warm" style="padding:12px 11px">
+        <div class="h4 tc" style="font-size:12px;margin-bottom:5px">Single purchase</div>
+        <div class="rev-item" style="font-size:11px">Digital · 1cr · $10.99</div>
+        <div class="rev-item" style="font-size:11px">Softcover · 6cr · $65.94</div>
+        <div class="rev-item" style="font-size:11px">Hardcover · 8cr · $87.92</div>
+      </div>
+      <div class="rev-card" style="background:var(--cr);border:1px solid var(--br);padding:12px 11px">
+        <div class="h4" style="font-size:12px;margin-bottom:5px">Subscription</div>
+        <div class="rev-item" style="font-size:11px">$8.99/mo · 1 credit</div>
+        <div class="rev-item" style="font-size:11px">$16.99/mo · 2 credits</div>
+        <div class="rev-item" style="font-size:11px">$23.99/mo · 3 credits</div>
+        <div class="rev-item" style="font-size:11px;font-style:italic;color:var(--t)">Living Book incl.</div>
+      </div>
+      <div class="rev-card sage" style="padding:12px 11px">
+        <div class="h4 sc" style="font-size:12px;margin-bottom:5px">Gifting</div>
+        <div class="rev-item" style="font-size:11px">Baby showers</div>
+        <div class="rev-item" style="font-size:11px">Birthdays</div>
+        <div class="rev-item" style="font-size:11px">Christmas</div>
+        <div class="rev-item" style="font-size:11px;font-style:italic;color:var(--s)">Gift a sub too</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S08 MOAT -->
+<div class="slide" data-n="8">
+<div class="full-dk" style="padding:28px 44px">
+  <div class="ew wh" style="margin-bottom:5px">08 · Why We Win</div>
+  <div class="h2 wh" style="margin-bottom:5px;max-width:640px"><em style="font-style:italic;color:#E8A870">Family trust</em> is the moat. Everything else builds it.</div>
+  <p class="body wh" style="max-width:580px;margin-bottom:16px;opacity:.6;font-size:13px">Building a trusting relationship with a family, across years of their child's life, cannot be replicated by any competitor.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex:1">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="background:rgba(196,97,74,.12);border:1px solid rgba(196,97,74,.22);border-radius:12px;padding:14px 15px;flex:1">
+        <div style="font-size:20px;margin-bottom:7px">🧠</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t);margin-bottom:5px">Leading Psychologists</div>
+        <p style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.5">Prof. Robyn Fivush (Emory) + Dr. Erica Komisar. Named, credentialed, uncopyable.</p>
+      </div>
+      <div style="background:rgba(196,97,74,.08);border:1px solid rgba(196,97,74,.15);border-radius:12px;padding:14px 15px;flex:1">
+        <div style="font-size:20px;margin-bottom:7px">✍️</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t);margin-bottom:5px">Science &amp; Craft</div>
+        <p style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.5">Psychology at every layer of the pipeline. Writing grounded in the Donaldson, Jeffers, Mem Fox tradition.</p>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 15px;flex:1">
+        <div style="font-size:20px;margin-bottom:7px">🔒</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px">Safety &amp; Credibility</div>
+        <p style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.5">Photos deleted post-creation. No AI training use. Two human review gates before every delivery.</p>
+      </div>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 15px;flex:1">
+        <div style="font-size:20px;margin-bottom:7px">🏅</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px">ISO 27001 Certification</div>
+        <p style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.5">In roadmap. Enterprise-grade data security. The only children's book platform to pursue it.</p>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="background:rgba(107,145,117,.12);border:1px solid rgba(107,145,117,.22);border-radius:12px;padding:14px 15px;flex:1">
+        <div style="font-size:20px;margin-bottom:7px">🤝</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--s);margin-bottom:5px">Institutional Partnerships</div>
+        <p style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.5">Raising Children Network, trusted parenting organisations, and psychology practices. Trust earned through institutions.</p>
+      </div>
+      <div style="background:rgba(107,145,117,.08);border:1px solid rgba(107,145,117,.15);border-radius:12px;padding:14px 15px;flex:1">
+        <div style="font-size:20px;margin-bottom:7px">🌱</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--s);margin-bottom:5px">Compounding Irreplaceability</div>
+        <p style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.5">Platform learns more about your family with every book. A library of lived experience cannot be replicated elsewhere.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S09 FOUNDER -->
+<div class="slide" data-n="9">
+<div class="split split-5050" style="min-height:100%">
+  <div class="img-panel" style="position:relative">
+    <img src="images/AA_-_Xmas_Market.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
+    <div style="position:absolute;bottom:0;left:0;right:0;padding:22px 26px;background:linear-gradient(transparent,rgba(14,10,8,.82))">
+      <div class="ew wh" style="margin-bottom:5px">09 · The Founder</div>
+      <div class="h3 wh" style="margin-bottom:5px;font-size:clamp(18px,2.2vw,26px)">Built from a personal love.</div>
+      <p style="font-size:12px;color:#C4A99A;line-height:1.5">Matt Fern · Founder, Growth for Purpose</p>
+    </div>
+  </div>
+  <div class="txt-panel lt" style="padding:28px 30px">
+    <div style="margin-bottom:12px">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:3px">Matt Fern</div>
+      <div style="font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--t);margin-bottom:10px">Founder &amp; CEO</div>
+      <p class="body" style="margin-bottom:8px;font-size:13px">Founder of <strong>Growth for Purpose</strong>, a growth, lifecycle, and product activation agency for D2C consumer apps. Specialism in health, mental health, and family. Deep expertise in <strong>product activation, engagement, and retention</strong>. Kindred came from reading to his two-year-old son every night.</p>
+      <p class="body" style="font-size:13px">The pipeline works. The category is untapped. The gap to launch is <strong>weeks, not months.</strong></p>
+    </div>
+    <div style="font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gh);margin-bottom:7px">GFP clients include</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+      <span style="font-size:11px;background:var(--tpale);color:#7A3020;padding:3px 10px;border-radius:100px;font-weight:500">Heidi Health</span>
+      <span style="font-size:11px;background:var(--tpale);color:#7A3020;padding:3px 10px;border-radius:100px;font-weight:500">Mamamia · AU's #1 women's platform</span>
+      <span style="font-size:11px;background:var(--tpale);color:#7A3020;padding:3px 10px;border-radius:100px;font-weight:500">Talked · AU's #1 therapy app</span>
+      <span style="font-size:11px;background:var(--tpale);color:#7A3020;padding:3px 10px;border-radius:100px;font-weight:500">SleepWellBaby · AU's #1 baby sleep app</span>
+      <span style="font-size:11px;background:var(--tpale);color:#7A3020;padding:3px 10px;border-radius:100px;font-weight:500">Human Health</span>
+      <span style="font-size:11px;background:rgba(26,23,20,.05);color:var(--soft);padding:3px 10px;border-radius:100px">+15 others</span>
+    </div>
+    <div class="testi-grid" style="margin-bottom:10px">
+      <div class="testi"><p>"Taught us a tremendous amount and made a big, highly measurable impact."</p><div class="testi-attr">Ben Berger, CPO @ Wisr Finance</div></div>
+      <div class="testi"><p>"A knack for focusing on the most important thing at any given point."</p><div class="testi-attr">Dr. Thomas Kelly, CEO @ Heidi Health</div></div>
+      <div class="testi"><p>"Immediately turned an amateur Growth function 180 degrees."</p><div class="testi-attr">Mohammed Ismail, Sr PM @ Heidi Health</div></div>
+      <div class="testi"><p>"GFP transformed our approach to engaging with our app users."</p><div class="testi-attr">Trent Tinker, CTO @ WhiteFlag</div></div>
+    </div>
+    <div style="background:#EDE3DA;border-radius:8px;padding:9px 12px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:4px">Psychology Advisory</div>
+      <p style="font-size:12px;color:var(--soft)">Prof. Robyn Fivush (Emory) · Dr. Erica Komisar · <span style="color:var(--gh)">Formalisation in progress</span></p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S10 ASK -->
+<div class="slide" data-n="10">
+<div class="split split-5050" style="min-height:100%">
+  <div class="txt-panel dk" style="justify-content:space-between;position:relative;overflow:hidden;padding:36px 40px">
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(ellipse,rgba(196,97,74,.12),transparent 68%);top:-100px;right:-120px;pointer-events:none"></div>
+    <div style="position:relative;z-index:1">
+      <div class="ew wh" style="margin-bottom:12px">10 · The Ask</div>
+      <div class="h1 wh" style="margin-bottom:14px;max-width:380px;font-size:clamp(36px,4.5vw,56px)">A$100k.<br><em style="font-style:italic;color:#E8A870">Accelerate to Xmas 2026.</em></div>
+      <div class="rule wh" style="margin-bottom:14px"></div>
+      <div style="background:rgba(196,97,74,.14);border:1px solid rgba(196,97,74,.25);border-radius:12px;padding:14px 16px;margin-bottom:10px">
+        <div style="font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px">Use of funds</div>
+        <div class="ms-list">
+          <div class="ms-row nx" style="padding:7px 10px"><span class="ms-ic">👩‍💻</span><span class="ms-tx" style="font-size:12px">1 full-time engineer</span></div>
+          <div class="ms-row nx" style="padding:7px 10px"><span class="ms-ic">🎙</span><span class="ms-tx" style="font-size:12px">Influencer seeding ahead of gifting window</span></div>
+          <div class="ms-row nx" style="padding:7px 10px"><span class="ms-ic">🔒</span><span class="ms-tx" style="font-size:12px">ISO 27001 certification</span></div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:11px 14px">
+        <div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px">Instrument</div>
+        <p style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.6">SAFE note to accelerate us to certification, trust, security and partnership scale in advance of the Christmas 2026 shopping season.</p>
+      </div>
+    </div>
+    <div style="position:relative;z-index:1;text-align:center;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
+      <div style="font-size:15px;color:var(--t);font-weight:500;margin-bottom:3px">matt@growthforpurpose.com</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.25)">kindredbooks.ai · Sydney, Australia</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;margin-top:8px;opacity:.3;color:white">Children become the stories they're told.</p>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-rows:1fr 1fr;grid-template-columns:1fr 1fr;min-height:100%">
+    <div class="img-panel"><img src="images/AAA_-_Joanna_Win_Smile.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;border-right:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)"></div>
+    <div class="img-panel"><img src="images/AA_-_Win_toilet_paper.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;border-bottom:1px solid rgba(255,255,255,.05)"></div>
+    <div class="img-panel"><img src="images/AAA_-_Coos.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;border-right:1px solid rgba(255,255,255,.05)"></div>
+    <div class="img-panel"><img src="images/AA_-_Indian_Wedding.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+  </div>
+</div>
+</div>
+  </div><!-- /sv -->
+  <div class="mfoot">
+    <button class="fbtn" id="pb" onclick="nav(-1)" disabled>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 12L6 8l4-4"/></svg>Back
+    </button>
+    <div class="dots" id="dt"></div>
+    <button class="fbtn pri" id="nb" onclick="nav(1)">
+      Next<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+    </button>
+  </div>
+</div></div>
+
+<script>
+let cur=1;const TOT=10;
+function open_(){document.getElementById("ov").classList.add("open");document.body.style.overflow="hidden";buildDots();updateUI();}
+function close_(){document.getElementById("ov").classList.remove("open");document.body.style.overflow="";}
+function ovClick(e){if(e.target===document.getElementById("ov"))close_();}
+function nav(d){
+  const nxt=cur+d;if(nxt<1||nxt>TOT)return;
+  const sl=document.querySelectorAll(".slide");
+  sl[cur-1].classList.remove("active","bk");
+  cur=nxt;
+  sl[cur-1].classList.remove("active","bk");
+  sl[cur-1].classList.add(d>0?"active":"bk");
+  sl[cur-1].scrollTop=0;
+  updateUI();
+}
+function buildDots(){
+  const w=document.getElementById("dt");w.innerHTML="";
+  for(let i=1;i<=TOT;i++){
+    const b=document.createElement("button");
+    b.className="dot"+(i===cur?" on":"");
+    const n=i;
+    b.onclick=()=>{
+      if(n===cur)return;
+      const d=n>cur?1:-1;
+      document.querySelectorAll(".slide")[cur-1].classList.remove("active","bk");
+      cur=n;
+      document.querySelectorAll(".slide")[cur-1].classList.remove("active","bk");
+      document.querySelectorAll(".slide")[cur-1].classList.add(d>0?"active":"bk");
+      document.querySelectorAll(".slide")[cur-1].scrollTop=0;
+      updateUI();
+    };
+    w.appendChild(b);
+  }
+}
+function updateUI(){
+  document.getElementById("pf").style.width=(cur/TOT*100)+"%";
+  document.getElementById("ctr").textContent=String(cur).padStart(2,"0")+" / "+String(TOT).padStart(2,"0");
+  document.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("on",i+1===cur));
+  document.getElementById("pb").disabled=cur===1;
+  const nb=document.getElementById("nb");
+  if(cur===TOT){
+    nb.innerHTML='Get in touch <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+    nb.onclick=()=>window.open("mailto:matt@growthforpurpose.com?subject=Kindred%20Investment%20Opportunity&body=Hey%20Matt%2C%0A%0AI%20was%20impressed%20by%20your%20pitch.%20I%27d%20be%20keen%20to%20chat%20about%20the%20investment%20and%20growth%20opportunity%20of%20Kindred%20Books.%0A%0AWhen%20could%20we%20meet%3F — Investor Deck","_blank");
+  } else {
+    nb.innerHTML='Next <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M6 4l4 4-4 4"/></svg>';
+    nb.onclick=()=>nav(1);
+  }
+}
+document.addEventListener("keydown",e=>{
+  if(!document.getElementById("ov").classList.contains("open"))return;
+  if(e.key==="ArrowRight"||e.key==="ArrowDown")nav(1);
+  if(e.key==="ArrowLeft"||e.key==="ArrowUp")nav(-1);
+  if(e.key==="Escape")close_();
+});
+let tx=0;
+document.getElementById("sv").addEventListener("touchstart",e=>{tx=e.touches[0].clientX;},{passive:true});
+document.getElementById("sv").addEventListener("touchend",e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>45)nav(d>0?1:-1);},{passive:true});
+
+function toggleFS(){
+  const modal = document.getElementById("modal");
+  const ov = document.getElementById("ov");
+  const icon = document.getElementById("fsIcon");
+  const isFS = modal.classList.contains("fs");
+  if(!isFS){
+    modal.classList.add("fs");
+    ov.classList.add("fs-mode");
+    icon.innerHTML = '<path d="M6 2H2v4M10 2h4v4M14 10v4h-4M2 10v4h4"/>';
+    if(modal.requestFullscreen) modal.requestFullscreen().catch(()=>{});
+  } else {
+    modal.classList.remove("fs");
+    ov.classList.remove("fs-mode");
+    icon.innerHTML = '<path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/>';
+    if(document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+  }
+}
+// Sync FS state if user presses Escape in native fullscreen
+document.addEventListener("fullscreenchange",()=>{
+  if(!document.fullscreenElement){
+    document.getElementById("modal").classList.remove("fs");
+    document.getElementById("ov").classList.remove("fs-mode");
+    document.getElementById("fsIcon").innerHTML = '<path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/>';
+  }
+});
+</script>
+</body>
+</html>
